@@ -36,3 +36,4 @@ Your concept becomes the next V number automatically. Please keep copy within th
 | V6 | Two Doors Frame | Hotel and consumer brand, side by side |
 | V7 | Financing Concierge | Pick what you're financing; the proof follows (interactive) |
 | V8 | Customer Documentary | One customer, one outcome, full frame |
+| V9 | Funded Object Stack | V1 hero + real partner logos, then Concierge → Documentary → Milestone Line |
