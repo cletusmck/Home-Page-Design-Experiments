@@ -43,10 +43,67 @@ button { font: inherit; }
   top: 26px;
   left: 32px;
   z-index: 30;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 1s ease, transform 1s ease;
+  pointer-events: none;
+}
+.brand.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
 }
 .brand img { height: 30px; width: auto; }
 
+/* Full-bleed hover backgrounds behind the gate */
+.gate-bgs {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.gate-bgs .layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transform: scale(1.04);
+  transition: opacity 0.7s ease, transform 1.1s ease;
+}
+.gate-bgs .layer.on {
+  opacity: 1;
+  transform: scale(1);
+}
+.gate-bgs .veil {
+  position: absolute;
+  inset: 0;
+  background: rgba(244, 242, 240, 0.78);
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.gate-bgs.has-bg .veil { opacity: 1; }
+body.hover-hotel .gate-bgs .layer[data-bg="hotel"],
+body.hover-brand .gate-bgs .layer[data-bg="brand"],
+body.hover-other .gate-bgs .layer[data-bg="other"] { opacity: 1; transform: scale(1); }
+body.hover-hotel .gate-bgs,
+body.hover-brand .gate-bgs,
+body.hover-other .gate-bgs { /* for veil */ }
+body.hover-hotel .gate-bgs .veil,
+body.hover-brand .gate-bgs .veil,
+body.hover-other .gate-bgs .veil { opacity: 1; }
+/* When a photo is up, shift type to stay readable */
+body.hover-hotel #gate h1,
+body.hover-brand #gate h1,
+body.hover-other #gate h1,
+body.hover-hotel #gate .support,
+body.hover-brand #gate .support,
+body.hover-other #gate .support { color: var(--ink); }
+
 #gate {
+  position: relative;
+  z-index: 1;
   min-height: 100vh;
   display: grid;
   place-items: center;
@@ -57,11 +114,23 @@ button { font: inherit; }
 
 #gate h1 {
   font-weight: 400;
-  font-size: clamp(36px, 6.2vw, 68px);
-  line-height: 1.12;
   letter-spacing: -0.03em;
   color: var(--ink);
-  min-height: 1.25em;
+  min-height: 2.4em;
+}
+#gate h1 .line1 {
+  display: block;
+  font-size: clamp(42px, 7.2vw, 78px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+#gate h1 .line2 {
+  display: block;
+  margin-top: 0.12em;
+  font-size: clamp(24px, 3.6vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
 }
 #gate h1 .cursor {
   display: inline-block;
@@ -72,7 +141,10 @@ button { font: inherit; }
   vertical-align: -0.05em;
   animation: blink 1s steps(1) infinite;
 }
-#gate h1.done .cursor { opacity: 0; animation: none; }
+#gate h1 .cursor-2 { display: none; }
+#gate h1.typing-2 .cursor-1 { display: none; }
+#gate h1.typing-2 .cursor-2 { display: inline-block; }
+#gate h1.done .cursor { display: none; }
 @keyframes blink {
   0%, 49% { opacity: 1; }
   50%, 100% { opacity: 0; }
@@ -85,8 +157,8 @@ button { font: inherit; }
   color: var(--soft);
   max-width: 38ch;
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(14px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
 }
 #gate .support.show { opacity: 1; transform: none; }
 
@@ -96,25 +168,27 @@ button { font: inherit; }
   flex-wrap: wrap;
   gap: 12px;
   opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(16px);
+  transition: opacity 1.1s ease, transform 1.1s ease;
 }
 #gate .paths.show { opacity: 1; transform: none; }
 #gate .paths button {
   font-size: 16px;
   color: var(--ink);
-  background: var(--white);
+  background: rgba(255, 255, 255, 0.92);
   border: 1.5px solid rgba(0, 27, 46, 0.18);
   border-radius: 100px;
   padding: 16px 28px;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.25s, background 0.25s, color 0.25s, transform 0.15s, box-shadow 0.25s;
 }
 #gate .paths button:hover {
   border-color: var(--blue);
   color: var(--blue);
-  background: var(--blue-soft);
+  background: rgba(255, 255, 255, 0.96);
   transform: translateY(-1px);
+  box-shadow: 0 12px 30px -16px rgba(0, 27, 46, 0.35);
 }
 #gate .paths button.active {
   background: var(--blue);
@@ -135,7 +209,7 @@ body.picked #gate .paths button,
 #gate .paths button:hover,
 #gate .paths button.active { animation: none; }
 @keyframes pathWave {
-  0%, 36%, 100% { background: var(--white); border-color: rgba(0, 27, 46, 0.18); color: var(--ink); }
+  0%, 36%, 100% { background: rgba(255, 255, 255, 0.92); border-color: rgba(0, 27, 46, 0.18); color: var(--ink); }
   16% { background: var(--blue-soft); border-color: var(--blue); color: var(--blue); }
 }
 
@@ -146,8 +220,8 @@ body.picked #gate .paths button,
   border-top: 1px solid var(--line);
   max-width: 720px;
   opacity: 0;
-  transform: translateY(12px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
+  transform: translateY(16px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
 }
 #gate .trust.show { opacity: 1; transform: none; }
 #gate .trust-stat {
@@ -188,8 +262,9 @@ body.picked #gate .paths button,
 
 @media (prefers-reduced-motion: reduce) {
   #gate h1 .cursor { display: none; }
-  #gate .support, #gate .paths, #gate .trust { opacity: 1; transform: none; }
+  .brand, #gate .support, #gate .paths, #gate .trust { opacity: 1; transform: none; pointer-events: auto; }
   #gate .paths button { animation: none; }
+  .gate-bgs .layer { transition: none; }
 }
 
 /* ========== AFTER THE PATH ========== */
@@ -370,19 +445,29 @@ footer {
 </head>
 <body class="locked">
 
-<a class="brand" href="#" aria-label="Bridge">
+<div class="gate-bgs" aria-hidden="true">
+  <div class="layer" data-bg="hotel" style="background-image: url('../assets/bg/hotel.jpg')"></div>
+  <div class="layer" data-bg="brand" style="background-image: url('../assets/bg/retail.jpg')"></div>
+  <div class="layer" data-bg="other" style="background-image: url('../assets/bg/mainstreet.jpg')"></div>
+  <div class="veil"></div>
+</div>
+
+<a class="brand" id="gateBrand" href="#" aria-label="Bridge">
   <img src="../assets/logos/bridge-primary-blue.png" alt="Bridge">
 </a>
 
 <!-- ============ GATE ============ -->
 <section id="gate">
   <div class="inner">
-    <h1 id="typeH1" aria-label="Business capital for what's next."><span id="typeText"></span><span class="cursor" aria-hidden="true"></span></h1>
+    <h1 id="typeH1" aria-label="Business Capital for what's next.">
+      <span class="line1"><span id="typeLine1"></span><span class="cursor cursor-1" aria-hidden="true"></span></span>
+      <span class="line2"><span id="typeLine2"></span><span class="cursor cursor-2" aria-hidden="true"></span></span>
+    </h1>
     <p class="support" id="gateSupport">Bridge handles your capital needs so you can get back to growing your business.</p>
     <div class="paths" id="gatePaths" role="group" aria-label="Choose your path">
-      <button type="button" data-pick="hotel">Hotel Financing</button>
-      <button type="button" data-pick="brand">Consumer Brands</button>
-      <button type="button" data-pick="other">Other Businesses</button>
+      <button type="button" data-pick="hotel" data-bg="hotel">Hotel Owners</button>
+      <button type="button" data-pick="brand" data-bg="brand">Consumer Brands</button>
+      <button type="button" data-pick="other" data-bg="other">Other Businesses</button>
     </div>
     <div class="trust" id="gateTrust">
       <p class="trust-stat"><strong>$500M+</strong> funded in 2025</p>
@@ -549,58 +634,83 @@ footer {
 
 <footer class="gated t-all">
   <span>© 2026 Bridge. All rights reserved.</span>
-  <span>V1 · Milestone</span>
+  <span>V2 · Milestone</span>
 </footer>
 
 <script>
 (function () {
   var body = document.body;
+  var brand = document.getElementById("gateBrand");
   var buttons = document.querySelectorAll("#gate .paths button");
   var paths = document.getElementById("gatePaths");
   var support = document.getElementById("gateSupport");
   var trust = document.getElementById("gateTrust");
-  var typeText = document.getElementById("typeText");
+  var typeLine1 = document.getElementById("typeLine1");
+  var typeLine2 = document.getElementById("typeLine2");
   var typeH1 = document.getElementById("typeH1");
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var io = null;
-  var full = "Business capital for what's next.";
+  var line1 = "Business Capital";
+  var line2 = "for what's next.";
 
-  function revealChoices() {
-    if (support) support.classList.add("show");
+  function revealFlow() {
+    // Gradual sequence: logo → support → buttons → trust
+    if (brand) brand.classList.add("show");
+    setTimeout(function () {
+      if (support) support.classList.add("show");
+    }, reduced ? 0 : 500);
     setTimeout(function () {
       if (!paths) return;
       paths.classList.add("show");
-      // Wait longer after buttons appear before the highlight wave starts
-      setTimeout(function () { paths.classList.add("ready"); }, reduced ? 0 : 2200);
-      setTimeout(function () {
-        if (trust) trust.classList.add("show");
-      }, reduced ? 0 : 900);
-    }, reduced ? 0 : 700);
+      setTimeout(function () { paths.classList.add("ready"); }, reduced ? 0 : 2400);
+    }, reduced ? 0 : 1200);
+    setTimeout(function () {
+      if (trust) trust.classList.add("show");
+    }, reduced ? 0 : 2000);
+  }
+
+  function typeLine(el, text, done) {
+    var i = 0;
+    function tick() {
+      el.textContent = text.slice(0, i);
+      if (i < text.length) {
+        i += 1;
+        var delay = text.charAt(i - 1) === " " ? 180 : 78;
+        if (text.charAt(i - 1) === ".") delay = 420;
+        setTimeout(tick, delay);
+      } else {
+        done();
+      }
+    }
+    tick();
   }
 
   function typewrite() {
-    if (!typeText || !typeH1) return;
+    if (!typeLine1 || !typeLine2 || !typeH1) return;
     if (reduced) {
-      typeText.textContent = full;
+      typeLine1.textContent = line1;
+      typeLine2.textContent = line2;
       typeH1.classList.add("done");
-      revealChoices();
+      revealFlow();
       return;
     }
-    var i = 0;
-    function tick() {
-      typeText.textContent = full.slice(0, i);
-      if (i < full.length) {
-        i += 1;
-        // Slower typewriter with pauses after words
-        var delay = full.charAt(i - 1) === " " ? 180 : 78;
-        if (full.charAt(i - 1) === ".") delay = 420;
-        setTimeout(tick, delay);
-      } else {
-        typeH1.classList.add("done");
-        setTimeout(revealChoices, 600);
-      }
-    }
-    setTimeout(tick, 700);
+    setTimeout(function () {
+      typeLine(typeLine1, line1, function () {
+        typeH1.classList.add("typing-2");
+        setTimeout(function () {
+          typeLine(typeLine2, line2, function () {
+            typeH1.classList.remove("typing-2");
+            typeH1.classList.add("done");
+            setTimeout(revealFlow, 700);
+          });
+        }, 280);
+      });
+    }, 900);
+  }
+
+  function setHover(bg) {
+    body.classList.remove("hover-hotel", "hover-brand", "hover-other");
+    if (bg) body.classList.add("hover-" + bg);
   }
 
   function observeReveals() {
@@ -620,6 +730,7 @@ footer {
 
   function pick(track) {
     body.classList.remove("locked", "picked-hotel", "picked-brand", "picked-other");
+    body.classList.remove("hover-hotel", "hover-brand", "hover-other");
     body.classList.add("picked", "picked-" + track);
     buttons.forEach(function (b) {
       b.classList.toggle("active", b.getAttribute("data-pick") === track);
@@ -635,6 +746,10 @@ footer {
 
   buttons.forEach(function (b) {
     b.addEventListener("click", function () { pick(b.getAttribute("data-pick")); });
+    b.addEventListener("mouseenter", function () { setHover(b.getAttribute("data-bg")); });
+    b.addEventListener("mouseleave", function () { setHover(null); });
+    b.addEventListener("focus", function () { setHover(b.getAttribute("data-bg")); });
+    b.addEventListener("blur", function () { setHover(null); });
   });
 
   document.querySelectorAll("[data-switch]").forEach(function (b) {
