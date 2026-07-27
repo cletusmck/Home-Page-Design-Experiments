@@ -34,3 +34,4 @@ Your concept becomes the next V number automatically. Please keep copy within th
 | V4 | Warmth | Settle-style light fintech with proof cards |
 | V5 | Two Doors | Full-screen split; self-select hotels vs. brands |
 | V6 | Gallery | Proof hung as museum plates with placards |
+| V7 | Funded Object | Rotating funded closings as the homepage centerpiece |
