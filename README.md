@@ -29,4 +29,10 @@ Your concept becomes the next V number automatically. Please keep copy within th
 | Version | Title | Idea |
 | --- | --- | --- |
 | V1 | Funded Object | Rotating funded closings as the homepage centerpiece |
-| V2 | Milestone | LoveFrom-style white type composition: Bridge, arrives first; path choices follow; then successes per track |
+| V2 | Milestone | Path-gated type composition with staged reveal and hover scenes |
+| V3 | Funded Object Frame | Rotating wins beside a still headline (1280 frame) |
+| V4 | Proof Index | The ledger of real financings, up front |
+| V5 | Milestone Line | Opportunity to funded, in three steps |
+| V6 | Two Doors Frame | Hotel and consumer brand, side by side |
+| V7 | Financing Concierge | Pick what you're financing; the proof follows (interactive) |
+| V8 | Customer Documentary | One customer, one outcome, full frame |
