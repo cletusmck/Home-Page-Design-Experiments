@@ -28,10 +28,5 @@ Your concept becomes the next V number automatically. Please keep copy within th
 
 | Version | Title | Idea |
 | --- | --- | --- |
-| V1 | Milestone | LoveFrom-style white type composition: Bridge, arrives first; path choices follow; then successes per track |
-| V2 | Quiet | LoveFrom-style typographic essay with proof as footnotes |
-| V3 | Instrument | Leica-style dark precision; each deal as a spec plate |
-| V4 | Warmth | Settle-style light fintech with proof cards |
-| V5 | Two Doors | Full-screen split; self-select hotels vs. brands |
-| V6 | Gallery | Proof hung as museum plates with placards |
-| V7 | Funded Object | Rotating funded closings as the homepage centerpiece |
+| V1 | Funded Object | Rotating funded closings as the homepage centerpiece |
+| V2 | Milestone | LoveFrom-style white type composition: Bridge, arrives first; path choices follow; then successes per track |
