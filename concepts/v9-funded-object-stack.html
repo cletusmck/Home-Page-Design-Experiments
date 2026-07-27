@@ -82,6 +82,150 @@ a { color: var(--bridge-blue); } a:hover { color: #0049C2; }
   .partners-copy { flex: none; }
   .partners-logos { flex-wrap: wrap; justify-content: flex-start; }
 }
+
+.hiw {
+  background: linear-gradient(180deg, #F4F2F0 0%, #FFFFFF 100%);
+  padding: 56px 56px 48px;
+  border-bottom: 1px solid var(--gray-100);
+  text-align: center;
+}
+.hiw h2 {
+  margin: 0;
+  font-family: 'Newsreader', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  font-size: clamp(36px, 4vw, 52px);
+  line-height: 1.08;
+  color: var(--bridge-navy);
+}
+.hiw h2 .accent { color: var(--bridge-blue); font-weight: 500; }
+.hiw .lede {
+  margin: 18px auto 0;
+  max-width: 680px;
+  font-size: 16.5px;
+  line-height: 1.6;
+  color: var(--gray-600);
+}
+.hiw-video {
+  margin: 36px auto 0;
+  max-width: 960px;
+}
+.hiw-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bridge-navy);
+  cursor: pointer;
+  box-shadow: 0 12px 40px rgba(0,26,44,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hiw-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 48px rgba(0,26,44,0.16);
+}
+.hiw-trigger-media {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #001018;
+}
+.hiw-trigger-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hiw-trigger-shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 20, 40, 0.22);
+}
+.hiw-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hiw-play svg {
+  width: 64px;
+  height: 64px;
+  color: #fff;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35));
+}
+.hiw-cta {
+  margin-top: 28px;
+}
+.hiw-cta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bridge-blue);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 14px 26px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.hiw-modal {
+  border: 0;
+  padding: 0;
+  max-width: min(960px, calc(100vw - 32px));
+  width: 100%;
+  background: transparent;
+}
+.hiw-modal::backdrop {
+  background: rgba(0, 20, 40, 0.82);
+  backdrop-filter: blur(4px);
+}
+.hiw-modal-inner {
+  background: #001018;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.35);
+}
+.hiw-modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.hiw-modal-head h3 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 500;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+}
+.hiw-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+}
+.hiw-modal-close:hover { background: rgba(255,255,255,0.18); }
+.hiw-modal video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+@media (max-width: 900px) {
+  .hiw { padding: 40px 24px 36px; }
+}
 </style>
 </head>
 <body>
@@ -203,6 +347,48 @@ a { color: var(--bridge-blue); } a:hover { color: #0049C2; }
     </div>
   </section>
 
+
+  <!-- ===== How It Works (video header, like bridge.co/how-it-works) ===== -->
+  <section class="hiw" aria-label="How financing works with Bridge">
+    <h2>How Production Financing<br>Works with <span class="accent">Bridge</span></h2>
+    <p class="lede">Bridge fronts up to 100% of production cost against a confirmed order and waits to be repaid until your retailer does. You keep the deal and the equity.</p>
+    <div class="hiw-video">
+      <button type="button" class="hiw-trigger" id="hiwOpen" aria-haspopup="dialog" aria-controls="hiwModal" aria-label="Watch the program overview, about 2 minutes">
+        <span class="hiw-trigger-media" aria-hidden="true">
+          <img src="../assets/video/about-the-program-poster.jpg" alt="" width="1280" height="720" loading="lazy">
+          <span class="hiw-trigger-shade"></span>
+          <span class="hiw-play">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </span>
+      </button>
+    </div>
+    <div class="hiw-cta">
+      <span>Request financing <span aria-hidden="true">&rarr;</span></span>
+    </div>
+  </section>
+
+  <dialog class="hiw-modal" id="hiwModal" aria-labelledby="hiwModalTitle">
+    <div class="hiw-modal-inner">
+      <div class="hiw-modal-head">
+        <h3 id="hiwModalTitle">About the Bridge program</h3>
+        <button type="button" class="hiw-modal-close" id="hiwClose" aria-label="Close video">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+      <video
+        id="hiwPlayer"
+        controls
+        playsinline
+        preload="none"
+        poster="../assets/video/about-the-program-poster.jpg"
+        src="../assets/video/about-the-program.mp4"
+      >
+        Your browser does not support embedded video.
+      </video>
+    </div>
+  </dialog>
+
   <!-- ===== V8 Customer Documentary ===== -->
   <section aria-label="Customer Documentary" style="background: var(--bridge-navy)">
     <div style="position: relative; height: 680px; overflow: hidden">
@@ -315,6 +501,28 @@ function render(){
   for (const k of ['name','amount','role','desc','quote','attr']) document.getElementById('p-' + k).textContent = c[k];
 }
 render();
+
+(function(){
+  const modal = document.getElementById('hiwModal');
+  const player = document.getElementById('hiwPlayer');
+  const openBtn = document.getElementById('hiwOpen');
+  const closeBtn = document.getElementById('hiwClose');
+  if (!modal || !player || !openBtn) return;
+  function open(){
+    if (typeof modal.showModal === 'function') modal.showModal();
+    else modal.setAttribute('open','');
+    try { player.play(); } catch(e) {}
+  }
+  function close(){
+    player.pause();
+    if (typeof modal.close === 'function') modal.close();
+    else modal.removeAttribute('open');
+  }
+  openBtn.addEventListener('click', open);
+  closeBtn && closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+  modal.addEventListener('close', () => { player.pause(); });
+})();
 </script>
 </body>
 </html>
