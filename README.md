@@ -28,7 +28,7 @@ Your concept becomes the next V number automatically. Please keep copy within th
 
 | Version | Title | Idea |
 | --- | --- | --- |
-| V1 | Milestone | Category gate (Hotel / Consumer Brands / Other), then a cinematic scroll of successes per track |
+| V1 | Milestone | LoveFrom-style white type composition: Bridge, arrives first; path choices follow; then successes per track |
 | V2 | Quiet | LoveFrom-style typographic essay with proof as footnotes |
 | V3 | Instrument | Leica-style dark precision; each deal as a spec plate |
 | V4 | Warmth | Settle-style light fintech with proof cards |
