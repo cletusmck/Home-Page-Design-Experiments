@@ -40,11 +40,11 @@ button { font: inherit; }
 /* ========== GATE ========== */
 .brand {
   position: fixed;
-  top: 28px;
+  top: 26px;
   left: 32px;
   z-index: 30;
 }
-.brand img { height: 28px; width: auto; }
+.brand img { height: 30px; width: auto; }
 
 #gate {
   min-height: 100vh;
@@ -139,9 +139,56 @@ body.picked #gate .paths button,
   16% { background: var(--blue-soft); border-color: var(--blue); color: var(--blue); }
 }
 
+/* Trust builder — quiet proof under the path choice */
+#gate .trust {
+  margin-top: 3.4em;
+  padding-top: 2em;
+  border-top: 1px solid var(--line);
+  max-width: 720px;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#gate .trust.show { opacity: 1; transform: none; }
+#gate .trust-stat {
+  font-size: clamp(22px, 2.8vw, 28px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1.25;
+}
+#gate .trust-stat strong {
+  font-weight: 400;
+  color: var(--blue);
+}
+#gate .trust-label {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--soft);
+}
+#gate .trust-logos {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px 36px;
+}
+#gate .trust-logos img {
+  height: 22px;
+  width: auto;
+  opacity: 0.72;
+  filter: grayscale(1);
+  transition: opacity 0.2s, filter 0.2s;
+}
+#gate .trust-logos img:hover {
+  opacity: 1;
+  filter: none;
+}
+#gate .trust-logos img.taller { height: 28px; }
+#gate .trust-logos img.bank { height: 20px; }
+
 @media (prefers-reduced-motion: reduce) {
   #gate h1 .cursor { display: none; }
-  #gate .support, #gate .paths { opacity: 1; transform: none; }
+  #gate .support, #gate .paths, #gate .trust { opacity: 1; transform: none; }
   #gate .paths button { animation: none; }
 }
 
@@ -324,7 +371,7 @@ footer {
 <body class="locked">
 
 <a class="brand" href="#" aria-label="Bridge">
-  <img src="../assets/logos/bridge-arch-blue.svg" alt="Bridge">
+  <img src="../assets/logos/bridge-primary-blue.png" alt="Bridge">
 </a>
 
 <!-- ============ GATE ============ -->
@@ -336,6 +383,18 @@ footer {
       <button type="button" data-pick="hotel">Hotel Financing</button>
       <button type="button" data-pick="brand">Consumer Brands</button>
       <button type="button" data-pick="other">Other Businesses</button>
+    </div>
+    <div class="trust" id="gateTrust">
+      <p class="trust-stat"><strong>$500M+</strong> funded in 2025</p>
+      <p class="trust-label">Corporate and capital partners</p>
+      <div class="trust-logos" aria-label="Partner logos">
+        <img src="../assets/logos/walmart.svg" alt="Walmart">
+        <img class="taller" src="../assets/logos/sams-club-color.png" alt="Sam's Club">
+        <img class="bank" src="../assets/logos/fifth-third-color.png" alt="Fifth Third Bank">
+        <img class="bank" src="../assets/logos/us-bank-color.png" alt="U.S. Bank">
+        <img class="bank" src="../assets/logos/citi.svg" alt="Citi">
+        <img class="bank" src="../assets/logos/ttv-capital-color.png" alt="TTV Capital">
+      </div>
     </div>
   </div>
 </section>
@@ -499,6 +558,7 @@ footer {
   var buttons = document.querySelectorAll("#gate .paths button");
   var paths = document.getElementById("gatePaths");
   var support = document.getElementById("gateSupport");
+  var trust = document.getElementById("gateTrust");
   var typeText = document.getElementById("typeText");
   var typeH1 = document.getElementById("typeH1");
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -512,6 +572,9 @@ footer {
       paths.classList.add("show");
       // Wait longer after buttons appear before the highlight wave starts
       setTimeout(function () { paths.classList.add("ready"); }, reduced ? 0 : 2200);
+      setTimeout(function () {
+        if (trust) trust.classList.add("show");
+      }, reduced ? 0 : 900);
     }, reduced ? 0 : 700);
   }
 
