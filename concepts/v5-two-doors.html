@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bridge — Concept 04: Two Doors</title>
+<meta name="description" content="Bridge finances hotel projects and consumer brand growth. Choose your door.">
+<style>
+@font-face {
+  font-family: Mabrypro;
+  src: url("https://cdn.prod.website-files.com/67e6ce1c227912a33fb840d1/694ce5720a8dec4a7b38deb4_MabryPro.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --navy: #001b2e;
+  --navy-deep: #01131f;
+  --cream: #f4f2f0;
+  --blue: #005ff1;
+  --yellow: #f5ff3d;
+  --muted-dark: rgba(244, 242, 240, 0.65);
+  --muted-light: #5b6a75;
+  --sans: Mabrypro, "Helvetica Neue", Arial, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); -webkit-font-smoothing: antialiased; background: var(--cream); color: var(--navy); }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+.topline {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 26px 36px;
+  mix-blend-mode: normal;
+  pointer-events: none;
+}
+.topline > * { pointer-events: auto; }
+.topline .logo img { height: 24px; }
+.topline .statement {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244, 242, 240, 0.85);
+  text-align: center;
+  white-space: nowrap;
+}
+.topline .cta {
+  font-size: 13px;
+  background: var(--cream);
+  color: var(--navy);
+  border-radius: 100px;
+  padding: 11px 20px;
+  transition: background 0.2s, color 0.2s;
+}
+.topline .cta:hover { background: var(--blue); color: #fff; }
+@media (max-width: 760px) { .topline .statement { display: none; } }
+
+.doors {
+  display: flex;
+  min-height: 100vh;
+}
+.door {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 120px 52px 56px;
+  overflow: hidden;
+  transition: flex 0.55s cubic-bezier(0.32, 0.72, 0.24, 1);
+}
+.door:hover { flex: 1.45; }
+
+.door-hotels { background: var(--navy-deep); color: var(--cream); }
+.door-hotels .archset {
+  position: absolute;
+  inset: 0;
+  opacity: 0.55;
+}
+.door-hotels .arch {
+  position: absolute;
+  left: 50%;
+  bottom: -22vh;
+  transform: translateX(-50%);
+  border: 1px solid rgba(244, 242, 240, 0.28);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.door-hotels .arch.a1 { width: 62vh; height: 62vh; }
+.door-hotels .arch.a2 { width: 46vh; height: 46vh; border-color: rgba(0, 95, 241, 0.55); }
+.door-hotels .arch.a3 { width: 30vh; height: 30vh; border-color: rgba(244, 242, 240, 0.16); }
+
+.door-brands { background: var(--cream); color: var(--navy); }
+.door-brands .photo {
+  position: absolute;
+  inset: 0;
+  background: url("../assets/stories/retail-shelf.png") center / cover no-repeat;
+  opacity: 0.9;
+}
+.door-brands .scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(244,242,240,0.1) 0%, rgba(244,242,240,0.72) 58%, rgba(244,242,240,0.97) 100%);
+}
+
+.door .content { position: relative; z-index: 2; max-width: 480px; }
+.door .role {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+.door-hotels .role { border: 1px solid rgba(244, 242, 240, 0.3); color: var(--yellow); }
+.door-brands .role { background: var(--navy); color: var(--cream); }
+.door h2 {
+  font-weight: 400;
+  font-size: clamp(34px, 3.6vw, 54px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.door p.desc {
+  margin-top: 16px;
+  font-size: 15.5px;
+  line-height: 1.6;
+  max-width: 42ch;
+}
+.door-hotels p.desc { color: var(--muted-dark); }
+.door-brands p.desc { color: var(--muted-light); }
+
+.door .proofline {
+  margin-top: 26px;
+  padding-top: 20px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  max-width: 44ch;
+}
+.door-hotels .proofline { border-top: 1px solid rgba(244, 242, 240, 0.18); color: var(--muted-dark); }
+.door-brands .proofline { border-top: 1px solid rgba(0, 27, 46, 0.15); color: var(--muted-light); }
+.door .proofline b { font-weight: 400; }
+.door-hotels .proofline b { color: var(--cream); }
+.door-brands .proofline b { color: var(--navy); }
+
+.door .enter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+.door-hotels .enter { color: var(--cream); }
+.door-brands .enter { color: var(--blue); }
+.door .enter .arrow { transition: transform 0.3s; }
+.door:hover .enter .arrow { transform: translateX(6px); }
+
+@media (max-width: 860px) {
+  .doors { flex-direction: column; }
+  .door { min-height: 88vh; padding: 100px 30px 48px; }
+  .door:hover { flex: 1; }
+}
+
+.below {
+  background: var(--cream);
+  padding: 110px 36px;
+}
+.below .wrap { max-width: 980px; margin: 0 auto; text-align: center; }
+.below h3 {
+  font-weight: 400;
+  font-size: clamp(26px, 3.4vw, 42px);
+  letter-spacing: -0.018em;
+  max-width: 26ch;
+  margin: 0 auto;
+}
+.below .roles {
+  margin: 56px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(0, 27, 46, 0.12);
+  border: 1px solid rgba(0, 27, 46, 0.12);
+  text-align: left;
+  max-width: 900px;
+}
+.below .rolecard { background: var(--cream); padding: 36px 34px; }
+.below .rolecard h4 {
+  font-weight: 400;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 14px;
+}
+.below .rolecard p { font-size: 15px; line-height: 1.65; color: #33424d; }
+@media (max-width: 760px) { .below .roles { grid-template-columns: 1fr; } }
+
+.final {
+  background: var(--navy);
+  color: var(--cream);
+  text-align: center;
+  padding: 120px 36px;
+}
+.final h2 { font-weight: 400; font-size: clamp(30px, 4.6vw, 56px); letter-spacing: -0.02em; }
+.final p { margin: 20px auto 0; max-width: 50ch; font-size: 16px; line-height: 1.65; color: var(--muted-dark); }
+.final .cta {
+  display: inline-block;
+  margin-top: 40px;
+  background: var(--blue);
+  color: #fff;
+  border-radius: 100px;
+  padding: 17px 36px;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+.final .cta:hover { background: #1a70ff; }
+.final .fine { margin-top: 18px; font-size: 12.5px; color: rgba(244, 242, 240, 0.5); }
+
+footer {
+  background: var(--navy);
+  color: rgba(244, 242, 240, 0.5);
+  font-size: 12px;
+  text-align: center;
+  padding: 0 0 44px;
+}
+</style>
+</head>
+<body>
+
+<div class="topline">
+  <a class="logo" href="#"><img src="../assets/logos/bridge-white.svg" alt="Bridge"></a>
+  <span class="statement">Bridge finances the milestones that move businesses forward</span>
+  <a class="cta" href="https://app.bridgemarketplace.com/borrower/rfps/application" target="_blank" rel="noopener">Tell us what you are financing</a>
+</div>
+
+<div class="doors">
+  <a class="door door-hotels" href="https://www.bridgemarketplace.com/hotel-financing">
+    <div class="archset" aria-hidden="true">
+      <span class="arch a1"></span>
+      <span class="arch a2"></span>
+      <span class="arch a3"></span>
+    </div>
+    <div class="content">
+      <span class="role">Direct lending · Construction &amp; PIP</span>
+      <h2>I am building, improving, or buying a hotel.</h2>
+      <p class="desc">Bridge is the direct lender for new construction and property improvement plans. For acquisitions, refinancing, and cash-out, Bridge structures the transaction, secures the appropriate capital, and manages it through closing.</p>
+      <p class="proofline">Financing partner to owners across <b>Hyatt, Hilton, Choice Hotels, and Red Roof</b> systems, and to <b>AAHOA</b>. Hundreds of millions of dollars of hotel financing guided through closing.</p>
+      <span class="enter">Enter hotel financing <span class="arrow">→</span></span>
+    </div>
+  </a>
+
+  <a class="door door-brands" href="https://retail.bridgemarketplace.com/funding-stories/">
+    <div class="photo" aria-hidden="true"></div>
+    <div class="scrim" aria-hidden="true"></div>
+    <div class="content">
+      <span class="role">Bridge Direct Lending</span>
+      <h2>I won the retail order. Now I need to produce it.</h2>
+      <p class="desc">Bridge is the direct lender to consumer brands. We fund approved production, inventory, vendor, and fulfillment costs before retailer payment arrives, so your cash and equity stay free for growth. Subject to underwriting.</p>
+      <p class="proofline"><b>DogSauce</b> filled a Walmart Open Call order across <b>3,000+ stores</b> with 100% of COGS funded. <b>LIVWELL</b> shipped an $800,000 Whole Foods order.</p>
+      <span class="enter">Enter brand financing <span class="arrow">→</span></span>
+    </div>
+  </a>
+</div>
+
+<section class="below">
+  <div class="wrap">
+    <h3>Two doors, one team, and a role that is always stated plainly.</h3>
+    <div class="roles">
+      <div class="rolecard">
+        <h4>Bridge Direct Lending</h4>
+        <p>Bridge evaluates, underwrites, structures, and provides the capital. This is Bridge's role for all consumer brand programs and for hotel new construction and PIP financing, subject to underwriting and documentation.</p>
+      </div>
+      <div class="rolecard">
+        <h4>Financing Secured by Bridge</h4>
+        <p>For other hotel transactions, Bridge evaluates and structures the opportunity, identifies the appropriate external capital, and manages the process until documents are signed and funds are wired.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <h2>Not sure which door?</h2>
+  <p>Tell us what you are financing. The hotel, the order, the acquisition, the improvement plan. Our team will point you to the right path and respond with a considered view.</p>
+  <a class="cta" href="https://app.bridgemarketplace.com/borrower/rfps/application" target="_blank" rel="noopener">Tell us what you are financing</a>
+  <p class="fine">Closing remains subject to underwriting, approvals, and definitive documentation.</p>
+</section>
+
+<footer>© 2026 Bridge. All rights reserved. · Concept 04 · Two Doors</footer>
+
+</body>
+</html>

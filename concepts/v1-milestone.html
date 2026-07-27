@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bridge — Concept 06: Milestone</title>
+<meta name="description" content="Business capital for what's next. Bridge finances hotels, consumer brands, and growing businesses.">
+<style>
+@font-face {
+  font-family: Mabrypro;
+  src: url("https://cdn.prod.website-files.com/67e6ce1c227912a33fb840d1/694ce5720a8dec4a7b38deb4_MabryPro.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
+  --bg: #f4f2f0;
+  --white: #ffffff;
+  --navy: #001b2e;
+  --body: #52616c;
+  --blue: #005ff1;
+  --blue-soft: #dbebff;
+  --hair: rgba(0, 27, 46, 0.14);
+  --cream: #f4f2f0;
+  --dim-on-dark: rgba(244, 242, 240, 0.75);
+  --sans: Mabrypro, "Helvetica Neue", Arial, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--navy);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+body.locked { overflow: hidden; height: 100vh; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+
+.top {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 36px;
+  background: linear-gradient(180deg, rgba(244, 242, 240, 0.92), rgba(244, 242, 240, 0));
+}
+.top img { height: 24px; }
+.top .cta {
+  font-size: 13px;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 100px;
+  padding: 11px 20px;
+  transition: background 0.2s;
+}
+.top .cta:hover { background: var(--blue); }
+
+.scene {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 120px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.scene .inner { max-width: 900px; text-align: center; position: relative; z-index: 2; }
+.scene .kicker {
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--blue);
+  display: block;
+  margin-bottom: 30px;
+}
+.scene h1, .scene h2 {
+  font-weight: 400;
+  font-size: clamp(38px, 6.4vw, 84px);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--navy);
+}
+.scene h1 .b, .scene h2 .b { color: var(--blue); }
+.scene .support {
+  margin: 30px auto 0;
+  max-width: 56ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--body);
+}
+.scene .support b { font-weight: 400; color: var(--navy); }
+
+/* Category gate */
+.choices {
+  margin: 56px auto 0;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.choice {
+  font-family: var(--sans);
+  font-size: 16px;
+  color: var(--navy);
+  background: transparent;
+  border: 1px solid rgba(0, 27, 46, 0.22);
+  border-radius: 100px;
+  padding: 16px 32px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s;
+}
+.choice:hover { border-color: var(--blue); color: var(--blue); }
+.choice.active { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+#gate h1 {
+  font-size: clamp(36px, 5.8vw, 72px);
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: -0.02em;
+}
+/* After 2 seconds, Capital turns primary blue */
+#gate h1 .grow {
+  display: inline-block;
+  animation: toBlue 0.8s ease 2s forwards;
+}
+@keyframes toBlue { to { color: var(--blue); } }
+
+/* After another 2 seconds, a color wave flows across the buttons like a stadium wave */
+#gate .choice { animation: nudge 8s ease-in-out infinite; }
+#gate .choice:nth-child(1) { animation-delay: 4s; }
+#gate .choice:nth-child(2) { animation-delay: 4.8s; }
+#gate .choice:nth-child(3) { animation-delay: 5.6s; }
+body.picked #gate .choice, #gate .choice.active, #gate .choice:hover { animation: none; }
+#gate .support { color: var(--navy); }
+@keyframes nudge {
+  0%, 32%, 100% { background: transparent; border-color: rgba(0, 27, 46, 0.22); color: var(--navy); }
+  14% { background: var(--blue-soft); border-color: var(--blue); color: var(--blue); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #gate h1 .grow { animation: none; color: var(--blue); }
+  #gate .choice { animation: none; }
+}
+
+/* Gated scenes hidden until a category is picked */
+.gated { display: none; }
+body.picked-brand .scene.t-brand,
+body.picked-hotel .scene.t-hotel,
+body.picked-other .scene.t-other,
+body.picked .scene.t-all { display: grid; }
+body.picked footer.gated { display: flex; }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s ease, transform 0.9s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* Photo scenes stay dark for legibility over imagery */
+.scene-photo { background: var(--navy); }
+.scene-photo .bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 30%;
+  filter: brightness(0.45) saturate(0.9);
+}
+.scene-photo h1, .scene-photo h2, .scene-photo .stat { color: var(--cream); }
+.scene-photo .kicker { color: var(--dim-on-dark); }
+.scene-photo .stat-label { color: var(--dim-on-dark); }
+.scene-photo q { color: var(--dim-on-dark); }
+
+.stat {
+  font-size: clamp(52px, 9vw, 128px);
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--navy);
+}
+.stat-label {
+  margin-top: 22px;
+  font-size: 16px;
+  color: var(--body);
+}
+.role-badge {
+  display: inline-block;
+  margin-top: 26px;
+  font-size: 11.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue);
+  background: var(--white);
+  border: 1px solid var(--blue-soft);
+  border-radius: 100px;
+  padding: 9px 18px;
+}
+.scene q {
+  display: block;
+  margin: 26px auto 0;
+  max-width: 46ch;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--body);
+}
+
+.duo {
+  margin: 40px auto 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  max-width: 820px;
+  text-align: center;
+}
+.duo > div {
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 22px;
+  padding: 44px 32px;
+}
+.duo .amt { font-size: clamp(34px, 4.6vw, 56px); letter-spacing: -0.025em; color: var(--navy); }
+.duo .who { margin-top: 12px; font-size: 15px; color: var(--navy); }
+.duo .what { margin-top: 6px; font-size: 13px; color: var(--body); }
+.duo .badge { margin-top: 16px; display: inline-block; font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); }
+@media (max-width: 700px) { .duo { grid-template-columns: 1fr; } }
+
+/* Arch backdrop for hotel scenes */
+.archset { position: absolute; inset: 0; opacity: 0.6; }
+.archset .arch {
+  position: absolute;
+  left: 50%;
+  bottom: -20vh;
+  transform: translateX(-50%);
+  border: 1px solid rgba(0, 27, 46, 0.16);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+.archset .a1 { width: 64vh; height: 64vh; }
+.archset .a2 { width: 46vh; height: 46vh; border-color: rgba(0, 95, 241, 0.4); }
+.archset .a3 { width: 28vh; height: 28vh; border-color: rgba(0, 27, 46, 0.08); }
+
+.pathrow {
+  margin: 44px auto 0;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.pathrow a {
+  font-size: 14px;
+  color: var(--navy);
+  background: var(--white);
+  border: 1px solid var(--hair);
+  border-radius: 100px;
+  padding: 13px 26px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.pathrow a:hover { border-color: var(--blue); color: var(--blue); }
+
+.finale { background: var(--blue); }
+.finale h2 { color: #fff; }
+.finale .support { color: rgba(255, 255, 255, 0.85); }
+.finale .cta-big {
+  display: inline-block;
+  margin-top: 46px;
+  background: #fff;
+  color: var(--blue);
+  border-radius: 100px;
+  padding: 19px 42px;
+  font-size: 17px;
+  transition: transform 0.15s;
+}
+.finale .cta-big:hover { transform: translateY(-2px); }
+.finale .fine { margin-top: 20px; font-size: 12.5px; color: rgba(255, 255, 255, 0.7); }
+.finale .switch {
+  margin-top: 34px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.finale .switch button {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: #fff;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0 0 2px;
+}
+
+footer {
+  padding: 30px 36px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--body);
+}
+</style>
+</head>
+<body class="locked">
+
+<div class="top">
+  <a href="#"><img src="../assets/logos/bridge-arch-navy.svg" alt="Bridge"></a>
+  <a class="cta" href="https://app.bridgemarketplace.com/borrower/rfps/application" target="_blank" rel="noopener">Tell us what you are financing</a>
+</div>
+
+<!-- ============ GATE ============ -->
+<section class="scene" id="gate">
+  <div class="inner reveal in">
+    <h1>Business <span class="grow">Capital</span> For What's Next</h1>
+    <p class="support">Bridge handles your capital needs so you can get back to growing your business</p>
+    <div class="choices" role="group" aria-label="Choose your business type">
+      <button class="choice" type="button" data-pick="hotel">Hotel Financing</button>
+      <button class="choice" type="button" data-pick="brand">Consumer Brands</button>
+      <button class="choice" type="button" data-pick="other">Other Businesses</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONSUMER BRAND TRACK ============ -->
+<section class="scene scene-photo gated t-brand">
+  <div class="bg" style="background-image: url('../assets/testimonials/dog-sauce-open-call.png')"></div>
+  <div class="inner reveal">
+    <span class="kicker">DogSauce · Walmart Open Call</span>
+    <div class="stat">3,000+</div>
+    <p class="stat-label">stores. 100% of the cost of goods funded by Bridge.</p>
+    <span class="role-badge">Bridge Direct Lending · Funded</span>
+    <q>“Bridge makes it possible to fill the orders without giving up equity.”</q>
+  </div>
+</section>
+
+<section class="scene scene-photo gated t-brand">
+  <div class="bg" style="background-image: url('../assets/stories/triumph-hero-brand.png')"></div>
+  <div class="inner reveal">
+    <span class="kicker">Triumph Systems · New Walmart supplier</span>
+    <div class="stat">1,266</div>
+    <p class="stat-label">stores. Production for the launch order funded in full.</p>
+    <span class="role-badge">Bridge Direct Lending · Funded</span>
+    <q>“When Walmart gives you a shot at 1,200+ stores, you take it.”</q>
+  </div>
+</section>
+
+<section class="scene gated t-brand">
+  <div class="inner reveal">
+    <span class="kicker">And the ones after that</span>
+    <h2>The order ships. The cash <span class="b">stays.</span></h2>
+    <div class="duo">
+      <div>
+        <div class="amt">$800,000</div>
+        <div class="who">LIVWELL</div>
+        <div class="what">Whole Foods purchase order · Funded</div>
+        <span class="badge">Bridge Direct Lending</span>
+      </div>
+      <div>
+        <div class="amt">$5,000,000</div>
+        <div class="who">Brands to Retail</div>
+        <div class="what">Multi-retailer expansion · Funded</div>
+        <span class="badge">Bridge Direct Lending</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="scene gated t-brand">
+  <div class="inner reveal">
+    <h2>Bridge is the <span class="b">direct lender</span> to consumer brands.</h2>
+    <p class="support">We fund approved production, inventory, vendor, and fulfillment costs tied to upcoming retail orders, up to 100% of approved COGS on qualifying transactions, subject to underwriting. Your cash and equity stay free for growth. <b>Eligible Walmart and Sam's Club suppliers</b> have access to a specialized program with faster underwriting decisions and exclusive program rates and terms, subject to underwriting and eligibility.</p>
+    <div class="pathrow">
+      <a href="https://retail.bridgemarketplace.com/funding-stories/">Fill a retail order</a>
+      <a href="https://retail.bridgemarketplace.com/funding-stories/">Finance inventory</a>
+      <a href="https://retail.bridgemarketplace.com/funding-stories/">Fund receivables</a>
+      <a href="https://retail.bridgemarketplace.com/funding-stories/">See all funding stories</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HOTEL TRACK ============ -->
+<section class="scene gated t-hotel">
+  <div class="archset" aria-hidden="true">
+    <span class="arch a1"></span><span class="arch a2"></span><span class="arch a3"></span>
+  </div>
+  <div class="inner reveal">
+    <span class="kicker">The record</span>
+    <div class="stat">Hundreds of millions</div>
+    <p class="stat-label">of dollars of hotel financing guided through closing for owners across the U.S.</p>
+    <span class="role-badge">Judged by what has been funded</span>
+  </div>
+</section>
+
+<section class="scene gated t-hotel">
+  <div class="inner reveal">
+    <span class="kicker">Financing partner to the owners behind</span>
+    <h2>Hyatt. Hilton. Choice. Red Roof. <span class="b">AAHOA.</span></h2>
+    <p class="support">Generational hoteliers, family operators, and developers. Refinancings, brand-mandated PIPs, acquisitions, ground-up construction, and portfolio growth, each one started inside today's underwriting reality and driven to funding.</p>
+  </div>
+</section>
+
+<section class="scene gated t-hotel">
+  <div class="inner reveal">
+    <h2>Bridge is the <span class="b">direct lender</span> for construction and PIPs.</h2>
+    <p class="support">For new construction and property improvement plans, Bridge makes the lending decision and provides the capital, subject to underwriting and documentation.</p>
+  </div>
+</section>
+
+<section class="scene gated t-hotel">
+  <div class="inner reveal">
+    <h2>For everything else, we <span class="b">secure the capital</span> and manage it to closing.</h2>
+    <p class="support">Acquisitions, refinancing, cash-out. Bridge evaluates and structures the deal, identifies the appropriate external capital, and stays accountable until documents are signed and funds are wired. <b>Financing Secured by Bridge</b>, stated plainly, every time.</p>
+    <div class="pathrow">
+      <a href="https://www.bridgemarketplace.com/hotel-financing">Build a hotel</a>
+      <a href="https://www.bridgemarketplace.com/hotel-financing">Complete a PIP</a>
+      <a href="https://www.bridgemarketplace.com/hotel-financing">Acquire or refinance</a>
+      <a href="https://www.bridgemarketplace.com/hotel-financing">Cash-out</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OTHER BUSINESSES TRACK ============ -->
+<section class="scene gated t-other">
+  <div class="inner reveal">
+    <h2>Growth needs capital before it <span class="b">pays for itself.</span></h2>
+    <p class="support">The expansion, the acquisition, the working capital gap. The problem is not demand. The problem is timing, and timing is a financing problem Bridge knows how to solve.</p>
+  </div>
+</section>
+
+<section class="scene scene-photo gated t-other">
+  <div class="bg" style="background-image: url('../assets/stories/chagrinovations.png')"></div>
+  <div class="inner reveal">
+    <span class="kicker">Chagrinovations · Retail expansion</span>
+    <div class="stat">$2,000,000</div>
+    <p class="stat-label">in growth financing to scale into retail.</p>
+    <span class="role-badge">Bridge Direct Lending · Funded</span>
+    <q>“Bridge provided the peace of mind and liquidity necessary to scale much more rapidly.”</q>
+  </div>
+</section>
+
+<section class="scene scene-photo gated t-other">
+  <div class="bg" style="background-image: url('../assets/stories/world-of-epi.png')"></div>
+  <div class="inner reveal">
+    <span class="kicker">World of EPI · Scaled growth</span>
+    <div class="stat">$2,000,000</div>
+    <p class="stat-label">to support growth at scale.</p>
+    <span class="role-badge">Bridge Direct Lending · Funded</span>
+    <q>“Bridge knew how to scale with us and helped us choose the right capital for our growth.”</q>
+  </div>
+</section>
+
+<section class="scene gated t-other">
+  <div class="inner reveal">
+    <h2>We <span class="b">understand the transaction</span> first. Then we fund it.</h2>
+    <p class="support">Working capital, acquisitions, refinancing, expansion. Bridge evaluates the need, structures the financing to hold through diligence, and provides or secures the capital, subject to underwriting. One accountable team from first conversation to funding.</p>
+    <div class="pathrow">
+      <a href="https://www.bridgemarketplace.com/wc/working-capital">Working capital</a>
+      <a href="https://www.bridgemarketplace.com/business-financing">Growth financing</a>
+      <a href="https://retail.bridgemarketplace.com/funding-stories/">See funding stories</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SHARED FINALE ============ -->
+<section class="scene finale gated t-all">
+  <div class="inner reveal">
+    <h2>Tell us what you are financing.</h2>
+    <p class="support">Share the milestone and our team will respond with a considered view of the financing path. Closing remains subject to underwriting, approvals, and definitive documentation.</p>
+    <a class="cta-big" href="https://app.bridgemarketplace.com/borrower/rfps/application" target="_blank" rel="noopener">Tell us what you are financing</a>
+    <p class="fine">Prefer to look first? <a href="https://retail.bridgemarketplace.com/funding-stories/" style="text-decoration: underline;">See financings like yours</a>.</p>
+    <p class="switch">Wrong path? <button type="button" data-switch>Choose a different business</button></p>
+  </div>
+</section>
+
+<footer class="gated t-all">
+  <span>© 2026 Bridge. All rights reserved.</span>
+  <span>Concept 06 · Milestone</span>
+</footer>
+
+<script>
+(function () {
+  var body = document.body;
+  var buttons = document.querySelectorAll(".choice");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var io = null;
+
+  function observeReveals() {
+    var els = document.querySelectorAll(".reveal:not(.in)");
+    if (!("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    if (io) io.disconnect();
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.3 });
+    els.forEach(function (el) { io.observe(el); });
+  }
+
+  function pick(track) {
+    body.classList.remove("locked", "picked-hotel", "picked-brand", "picked-other");
+    body.classList.add("picked", "picked-" + track);
+    buttons.forEach(function (b) {
+      b.classList.toggle("active", b.getAttribute("data-pick") === track);
+    });
+    observeReveals();
+    var first = document.querySelector(".scene.t-" + track);
+    if (first) {
+      requestAnimationFrame(function () {
+        first.scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+      });
+    }
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () { pick(b.getAttribute("data-pick")); });
+  });
+
+  document.querySelectorAll("[data-switch]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.getElementById("gate").scrollIntoView({ behavior: reduced ? "auto" : "smooth" });
+    });
+  });
+
+  observeReveals();
+})();
+</script>
+
+</body>
+</html>
