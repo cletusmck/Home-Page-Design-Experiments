@@ -122,19 +122,19 @@ button { font: inherit; }
 
 /* Soft wave across the buttons once they appear */
 #gate .paths button {
-  animation: pathWave 7.5s ease-in-out infinite;
+  animation: pathWave 14s ease-in-out infinite;
   animation-play-state: paused;
 }
 #gate .paths.ready button { animation-play-state: running; }
 #gate .paths button:nth-child(1) { animation-delay: 0s; }
-#gate .paths button:nth-child(2) { animation-delay: 0.7s; }
-#gate .paths button:nth-child(3) { animation-delay: 1.4s; }
+#gate .paths button:nth-child(2) { animation-delay: 1.4s; }
+#gate .paths button:nth-child(3) { animation-delay: 2.8s; }
 body.picked #gate .paths button,
 #gate .paths button:hover,
 #gate .paths button.active { animation: none; }
 @keyframes pathWave {
-  0%, 28%, 100% { background: var(--white); border-color: rgba(17, 17, 17, 0.22); color: var(--ink); }
-  12% { background: rgba(0, 95, 241, 0.08); border-color: var(--blue); color: var(--blue); }
+  0%, 36%, 100% { background: var(--white); border-color: rgba(17, 17, 17, 0.22); color: var(--ink); }
+  16% { background: rgba(0, 95, 241, 0.08); border-color: var(--blue); color: var(--blue); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -508,8 +508,9 @@ footer {
     setTimeout(function () {
       if (!paths) return;
       paths.classList.add("show");
-      setTimeout(function () { paths.classList.add("ready"); }, 700);
-    }, reduced ? 0 : 450);
+      // Wait longer after buttons appear before the highlight wave starts
+      setTimeout(function () { paths.classList.add("ready"); }, reduced ? 0 : 2200);
+    }, reduced ? 0 : 700);
   }
 
   function typewrite() {
@@ -525,16 +526,16 @@ footer {
       typeText.textContent = full.slice(0, i);
       if (i < full.length) {
         i += 1;
-        // Slight pause after words (spaces) for a document feel
-        var delay = full.charAt(i - 1) === " " ? 90 : 38;
-        if (full.charAt(i - 1) === ".") delay = 220;
+        // Slower typewriter with pauses after words
+        var delay = full.charAt(i - 1) === " " ? 180 : 78;
+        if (full.charAt(i - 1) === ".") delay = 420;
         setTimeout(tick, delay);
       } else {
         typeH1.classList.add("done");
-        setTimeout(revealChoices, 350);
+        setTimeout(revealChoices, 600);
       }
     }
-    setTimeout(tick, 400);
+    setTimeout(tick, 700);
   }
 
   function observeReveals() {
