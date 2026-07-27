@@ -35,110 +35,111 @@ img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; }
 
-/* ========== GATE: LoveFrom-style type composition ========== */
+/* ========== GATE ========== */
+.brand {
+  position: fixed;
+  top: 28px;
+  left: 32px;
+  z-index: 30;
+}
+.brand img { height: 26px; width: auto; }
+
 #gate {
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 10vh 28px 12vh;
+  padding: 14vh 28px 12vh;
   text-align: left;
 }
-#gate .inner {
-  width: min(920px, 100%);
-}
+#gate .inner { width: min(820px, 100%); }
 
 #gate h1 {
   font-weight: 400;
-  font-size: clamp(72px, 16vw, 168px);
-  line-height: 0.92;
-  letter-spacing: -0.045em;
+  font-size: clamp(36px, 6.2vw, 68px);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
   color: var(--ink);
+  min-height: 1.25em;
 }
-#gate h1 .comma { color: var(--ink); }
-
-#gate .line {
-  margin-top: 1.1em;
-  font-size: clamp(22px, 3.2vw, 34px);
-  line-height: 1.25;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  max-width: 22ch;
+#gate h1 .cursor {
+  display: inline-block;
+  width: 0.08em;
+  height: 0.9em;
+  margin-left: 0.08em;
+  background: var(--ink);
+  vertical-align: -0.05em;
+  animation: blink 1s steps(1) infinite;
+}
+#gate h1.done .cursor { opacity: 0; animation: none; }
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 #gate .support {
-  margin-top: 1.4em;
+  margin-top: 1.5em;
   font-size: clamp(16px, 1.8vw, 19px);
   line-height: 1.55;
   color: var(--soft);
-  max-width: 36ch;
+  max-width: 38ch;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
+#gate .support.show { opacity: 1; transform: none; }
 
 #gate .paths {
-  margin-top: 3.2em;
+  margin-top: 2.8em;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35em 1.6em;
-  max-width: 40ch;
-}
-#gate .paths button {
-  background: none;
-  border: none;
-  padding: 0.15em 0;
-  color: var(--ink);
-  font-size: clamp(18px, 2.2vw, 24px);
-  letter-spacing: -0.015em;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.25s ease;
-}
-#gate .paths button::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0.08em;
-  height: 1px;
-  background: currentColor;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.35s ease;
-}
-#gate .paths button:hover { color: var(--blue); }
-#gate .paths button:hover::after { transform: scaleX(1); }
-#gate .paths button.active { color: var(--blue); }
-#gate .paths button.active::after { transform: scaleX(1); }
-
-/* Choreographed entrance — brand first, then the rest arrives */
-#gate .arrive {
+  gap: 12px;
   opacity: 0;
-  transform: translateY(14px);
-  animation: arrive 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translateY(12px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
-#gate h1.arrive { animation-delay: 0.15s; }
-#gate .line.arrive { animation-delay: 1.35s; }
-#gate .support.arrive { animation-delay: 2.2s; }
-#gate .paths.arrive { animation-delay: 3s; }
-@keyframes arrive {
-  to { opacity: 1; transform: none; }
+#gate .paths.show { opacity: 1; transform: none; }
+#gate .paths button {
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--white);
+  border: 1.5px solid rgba(17, 17, 17, 0.22);
+  border-radius: 100px;
+  padding: 16px 28px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
+}
+#gate .paths button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: rgba(0, 95, 241, 0.05);
+  transform: translateY(-1px);
+}
+#gate .paths button.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
 }
 
-/* Soft wave across the path words after they land */
+/* Soft wave across the buttons once they appear */
 #gate .paths button {
   animation: pathWave 7.5s ease-in-out infinite;
   animation-play-state: paused;
 }
 #gate .paths.ready button { animation-play-state: running; }
-#gate .paths button:nth-child(1) { animation-delay: 4.2s; }
-#gate .paths button:nth-child(2) { animation-delay: 4.9s; }
-#gate .paths button:nth-child(3) { animation-delay: 5.6s; }
+#gate .paths button:nth-child(1) { animation-delay: 0s; }
+#gate .paths button:nth-child(2) { animation-delay: 0.7s; }
+#gate .paths button:nth-child(3) { animation-delay: 1.4s; }
 body.picked #gate .paths button,
 #gate .paths button:hover,
 #gate .paths button.active { animation: none; }
 @keyframes pathWave {
-  0%, 28%, 100% { color: var(--ink); }
-  12% { color: var(--blue); }
+  0%, 28%, 100% { background: var(--white); border-color: rgba(17, 17, 17, 0.22); color: var(--ink); }
+  12% { background: rgba(0, 95, 241, 0.08); border-color: var(--blue); color: var(--blue); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #gate .arrive { animation: none; opacity: 1; transform: none; }
+  #gate h1 .cursor { display: none; }
+  #gate .support, #gate .paths { opacity: 1; transform: none; }
   #gate .paths button { animation: none; }
 }
 
@@ -320,13 +321,16 @@ footer {
 </head>
 <body class="locked">
 
+<a class="brand" href="#" aria-label="Bridge">
+  <img src="../assets/logos/bridge-arch-navy.svg" alt="Bridge">
+</a>
+
 <!-- ============ GATE ============ -->
 <section id="gate">
   <div class="inner">
-    <h1 class="arrive">Bridge<span class="comma">,</span></h1>
-    <p class="line arrive">Business capital for what's next.</p>
-    <p class="support arrive">Bridge handles your capital needs so you can get back to growing your business.</p>
-    <div class="paths arrive" role="group" aria-label="Choose your path">
+    <h1 id="typeH1" aria-label="Business capital for what's next."><span id="typeText"></span><span class="cursor" aria-hidden="true"></span></h1>
+    <p class="support" id="gateSupport">Bridge handles your capital needs so you can get back to growing your business.</p>
+    <div class="paths" id="gatePaths" role="group" aria-label="Choose your path">
       <button type="button" data-pick="hotel">Hotel Financing</button>
       <button type="button" data-pick="brand">Consumer Brands</button>
       <button type="button" data-pick="other">Other Businesses</button>
@@ -491,17 +495,46 @@ footer {
 (function () {
   var body = document.body;
   var buttons = document.querySelectorAll("#gate .paths button");
-  var paths = document.querySelector("#gate .paths");
+  var paths = document.getElementById("gatePaths");
+  var support = document.getElementById("gateSupport");
+  var typeText = document.getElementById("typeText");
+  var typeH1 = document.getElementById("typeH1");
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var io = null;
+  var full = "Business capital for what's next.";
 
-  // Start the soft path-wave once the paths have arrived
-  if (paths) {
+  function revealChoices() {
+    if (support) support.classList.add("show");
+    setTimeout(function () {
+      if (!paths) return;
+      paths.classList.add("show");
+      setTimeout(function () { paths.classList.add("ready"); }, 700);
+    }, reduced ? 0 : 450);
+  }
+
+  function typewrite() {
+    if (!typeText || !typeH1) return;
     if (reduced) {
-      paths.classList.add("ready");
-    } else {
-      setTimeout(function () { paths.classList.add("ready"); }, 3200);
+      typeText.textContent = full;
+      typeH1.classList.add("done");
+      revealChoices();
+      return;
     }
+    var i = 0;
+    function tick() {
+      typeText.textContent = full.slice(0, i);
+      if (i < full.length) {
+        i += 1;
+        // Slight pause after words (spaces) for a document feel
+        var delay = full.charAt(i - 1) === " " ? 90 : 38;
+        if (full.charAt(i - 1) === ".") delay = 220;
+        setTimeout(tick, delay);
+      } else {
+        typeH1.classList.add("done");
+        setTimeout(revealChoices, 350);
+      }
+    }
+    setTimeout(tick, 400);
   }
 
   function observeReveals() {
@@ -545,6 +578,7 @@ footer {
   });
 
   observeReveals();
+  typewrite();
 })();
 </script>
 
