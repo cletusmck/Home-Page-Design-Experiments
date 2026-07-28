@@ -4,15 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bridge — Business capital for what's next</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..800;1,9..40,300..800&display=swap" rel="stylesheet">
 <meta name="description" content="Business capital for what's next. Bridge finances hotels, consumer brands, and growing businesses.">
 <style>
-@font-face {
-  font-family: Mabrypro;
-  src: url("https://cdn.prod.website-files.com/67e6ce1c227912a33fb840d1/694ce5720a8dec4a7b38deb4_MabryPro.otf") format("opentype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 :root {
   --white: #ffffff;
   --bg: #f4f2f0;
@@ -21,7 +17,7 @@
   --blue: #005ff1;
   --blue-soft: #dbebff;
   --line: rgba(0, 27, 46, 0.14);
-  --sans: Mabrypro, "Helvetica Neue", Arial, sans-serif;
+  --sans: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -662,7 +658,10 @@ footer {
     setTimeout(function () {
       if (!paths) return;
       paths.classList.add("show");
-      setTimeout(function () { paths.classList.add("ready"); }, reduced ? 0 : 2400);
+      setTimeout(function () {
+        paths.classList.add("ready");
+        startWaveSync();
+      }, reduced ? 0 : 2400);
     }, reduced ? 0 : 1200);
     setTimeout(function () {
       if (trust) trust.classList.add("show");
@@ -708,9 +707,52 @@ footer {
     }, 900);
   }
 
+  var pointerHover = null;
+  var waveStart = 0;
+  var waveRaf = 0;
+  var WAVE_MS = 14000;
+  var WAVE_PEAK = 0.16; /* matches pathWave 16% keyframe */
+  var WAVE_HOLD = 2200; /* ms window around peak while blue is visible */
+  var WAVE_DELAYS = [0, 1400, 2800];
+  var WAVE_BGS = ["hotel", "brand", "other"];
+
   function setHover(bg) {
     body.classList.remove("hover-hotel", "hover-brand", "hover-other");
     if (bg) body.classList.add("hover-" + bg);
+  }
+
+  function waveBgAt(elapsed) {
+    var peakMs = WAVE_MS * WAVE_PEAK;
+    var best = null;
+    var bestDist = Infinity;
+    for (var i = 0; i < WAVE_BGS.length; i++) {
+      var local = (elapsed - WAVE_DELAYS[i] + WAVE_MS) % WAVE_MS;
+      var dist = Math.abs(local - peakMs);
+      if (dist <= WAVE_HOLD / 2 && dist < bestDist) {
+        bestDist = dist;
+        best = WAVE_BGS[i];
+      }
+    }
+    return best;
+  }
+
+  function syncHoverFromWave() {
+    if (body.classList.contains("picked") || pointerHover) return;
+    if (!paths || !paths.classList.contains("ready")) {
+      setHover(null);
+      return;
+    }
+    setHover(waveBgAt((performance.now() - waveStart) % WAVE_MS));
+  }
+
+  function startWaveSync() {
+    if (reduced || waveRaf) return;
+    waveStart = performance.now();
+    function tick() {
+      syncHoverFromWave();
+      waveRaf = requestAnimationFrame(tick);
+    }
+    waveRaf = requestAnimationFrame(tick);
   }
 
   function observeReveals() {
@@ -731,6 +773,7 @@ footer {
   function pick(track) {
     body.classList.remove("locked", "picked-hotel", "picked-brand", "picked-other");
     body.classList.remove("hover-hotel", "hover-brand", "hover-other");
+    pointerHover = null;
     body.classList.add("picked", "picked-" + track);
     buttons.forEach(function (b) {
       b.classList.toggle("active", b.getAttribute("data-pick") === track);
@@ -746,10 +789,22 @@ footer {
 
   buttons.forEach(function (b) {
     b.addEventListener("click", function () { pick(b.getAttribute("data-pick")); });
-    b.addEventListener("mouseenter", function () { setHover(b.getAttribute("data-bg")); });
-    b.addEventListener("mouseleave", function () { setHover(null); });
-    b.addEventListener("focus", function () { setHover(b.getAttribute("data-bg")); });
-    b.addEventListener("blur", function () { setHover(null); });
+    b.addEventListener("mouseenter", function () {
+      pointerHover = b.getAttribute("data-bg");
+      setHover(pointerHover);
+    });
+    b.addEventListener("mouseleave", function () {
+      pointerHover = null;
+      syncHoverFromWave();
+    });
+    b.addEventListener("focus", function () {
+      pointerHover = b.getAttribute("data-bg");
+      setHover(pointerHover);
+    });
+    b.addEventListener("blur", function () {
+      pointerHover = null;
+      syncHoverFromWave();
+    });
   });
 
   document.querySelectorAll("[data-switch]").forEach(function (b) {
