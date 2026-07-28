@@ -39,15 +39,6 @@ button { font: inherit; }
   top: 26px;
   left: 32px;
   z-index: 30;
-  opacity: 0;
-  transform: translateY(-6px);
-  transition: opacity 1s ease, transform 1s ease;
-  pointer-events: none;
-}
-.brand.show {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
 }
 .brand img { height: 30px; width: auto; }
 
@@ -152,22 +143,14 @@ body.hover-other #gate .support { color: var(--ink); }
   line-height: 1.55;
   color: var(--soft);
   max-width: 38ch;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 1.1s ease, transform 1.1s ease;
 }
-#gate .support.show { opacity: 1; transform: none; }
 
 #gate .paths {
   margin-top: 2.8em;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 1.1s ease, transform 1.1s ease;
 }
-#gate .paths.show { opacity: 1; transform: none; }
 #gate .paths button {
   font-size: 16px;
   color: var(--ink);
@@ -215,11 +198,7 @@ body.picked #gate .paths button,
   padding-top: 2em;
   border-top: 1px solid var(--line);
   max-width: 720px;
-  opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 1.2s ease, transform 1.2s ease;
 }
-#gate .trust.show { opacity: 1; transform: none; }
 #gate .trust-stat {
   font-size: clamp(22px, 2.8vw, 28px);
   letter-spacing: -0.02em;
@@ -258,7 +237,6 @@ body.picked #gate .paths button,
 
 @media (prefers-reduced-motion: reduce) {
   #gate h1 .cursor { display: none; }
-  .brand, #gate .support, #gate .paths, #gate .trust { opacity: 1; transform: none; pointer-events: auto; }
   #gate .paths button { animation: none; }
   .gate-bgs .layer { transition: none; }
 }
@@ -649,25 +627,6 @@ footer {
   var line1 = "Business Capital";
   var line2 = "for what's next.";
 
-  function revealFlow() {
-    // Gradual sequence: logo → support → buttons → trust
-    if (brand) brand.classList.add("show");
-    setTimeout(function () {
-      if (support) support.classList.add("show");
-    }, reduced ? 0 : 500);
-    setTimeout(function () {
-      if (!paths) return;
-      paths.classList.add("show");
-      setTimeout(function () {
-        paths.classList.add("ready");
-        startWaveSync();
-      }, reduced ? 0 : 2400);
-    }, reduced ? 0 : 1200);
-    setTimeout(function () {
-      if (trust) trust.classList.add("show");
-    }, reduced ? 0 : 2000);
-  }
-
   function typeLine(el, text, done) {
     var i = 0;
     function tick() {
@@ -690,9 +649,9 @@ footer {
       typeLine1.textContent = line1;
       typeLine2.textContent = line2;
       typeH1.classList.add("done");
-      revealFlow();
       return;
     }
+    // Cursor already blinking; start typing after two blink cycles (1s each).
     setTimeout(function () {
       typeLine(typeLine1, line1, function () {
         typeH1.classList.add("typing-2");
@@ -700,11 +659,21 @@ footer {
           typeLine(typeLine2, line2, function () {
             typeH1.classList.remove("typing-2");
             typeH1.classList.add("done");
-            setTimeout(revealFlow, 700);
           });
         }, 280);
       });
-    }, 900);
+    }, 2000);
+  }
+
+  function boot() {
+    // Logo, support, buttons, and trust are visible immediately.
+    // Button wave starts after 2s; H1 types after two cursor blinks.
+    setTimeout(function () {
+      if (!paths) return;
+      paths.classList.add("ready");
+      startWaveSync();
+    }, reduced ? 0 : 2000);
+    typewrite();
   }
 
   var pointerHover = null;
@@ -814,7 +783,7 @@ footer {
   });
 
   observeReveals();
-  typewrite();
+  boot();
 })();
 </script>
 
